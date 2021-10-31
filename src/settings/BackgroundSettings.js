@@ -4,6 +4,7 @@ import colors from "./colors";
 import Slider from "rc-slider";
 import Tooltipify from "./Tooltipify";
 import UnsplashSelect from "./UnsplashSelect";
+import PersonalImageSelect from "./PersonalImageSelect";
 import "rc-slider/assets/index.css";
 
 class BackgroundSettings extends Component {
@@ -34,6 +35,7 @@ class BackgroundSettings extends Component {
             <option value="flat">Flat</option>
             <option value="gradient">Gradient</option>
             <option value="image">Image</option>
+            <option value="own_image">Your own image</option>
           </Form.Control>
         </Form.Group>
         {(s.background_mode === "flat" || s.background_mode === "gradient") && (
@@ -45,7 +47,7 @@ class BackgroundSettings extends Component {
             <Form.Label>Color</Form.Label>
             <Form.Control defaultValue={s.color_index + ""} as="select">
               {colors[s.background_mode].map((c, i) => {
-                return <option value={i}>{c.name}</option>;
+                return <option value={i} key={i}>{c.name}</option>;
               })}
             </Form.Control>
           </Form.Group>
@@ -61,6 +63,19 @@ class BackgroundSettings extends Component {
                     setStore("image_tags", value);
                     refetchAndSetImage();
                   }}
+                />
+              </Form.Group>
+            </div>
+          )}
+          {s.background_mode === "own_image" && (
+            <div>
+              <Form.Group>
+                <Form.Label>Your Image</Form.Label>
+                <PersonalImageSelect
+                    onChange={() => {
+                        setStore("image_tags", "");
+                        refetchAndSetImage();
+                    }}
                 />
               </Form.Group>
             </div>

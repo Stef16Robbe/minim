@@ -94,7 +94,7 @@ class Settings extends Component {
                 Font Size
                 <br />
                 <Slider
-                  value={s.widget_font_size}
+                  value={16}
                   step={1}
                   onChange={(widget_font_size) => {
                     setStore("widget_font_size", widget_font_size);

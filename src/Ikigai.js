@@ -272,6 +272,26 @@ export class Ikigai extends Component {
     }
   };
 
+  setPersonalImage = (b64img) => {
+    if (this.state.refresh_enabled) {
+      this.setState({ refresh_enabled: false });
+      setTimeout(() => {
+        this.setState({ refresh_enabled: true });
+    }, 2700);
+    let time_now = Math.round(new Date().getTime() / 1000);
+    localStorage.setItem("background_last_updated", time_now);
+
+    this.logNextBackgroundChange();
+
+    if (this.state.image_index === "0") {
+        localStorage.setItem("image", b64img);
+        this.setState({ image: b64img });
+    } else {
+        localStorage.setItem("image2", b64img);
+        this.setState({ image2: b64img });
+    }
+    }
+  };
 
   toDataUrl = (url, callback) => {
     console.log(url);
@@ -342,7 +362,7 @@ export class Ikigai extends Component {
     if (image_index === "1") image = image2;
     let WidgetComponent = widgets[widget];
     let background =
-      background_mode !== "image"
+      background_mode !== "image" && background_mode !== "own_image"
         ? {
             background:
               colors[this.state.background_mode][color_index].background,
@@ -353,21 +373,21 @@ export class Ikigai extends Component {
           };
 
     let foreground =
-      background_mode !== "image"
+      background_mode !== "image"  && background_mode !== "own_image"
         ? colors[this.state.background_mode][color_index].foreground
         : image_foreground;
 
     return (
       <React.Fragment>
         <div
-          class="flex-container"
+          className="flex-container"
           style={{
             justifyContent: this.xy_to_flex[this.state.widget_x],
             textAlign: this.state.widget_x,
             alignItems: this.xy_to_flex[this.state.widget_y],
           }}
         >
-          <div class="widget">
+          <div className="widget">
             <WidgetComponent
               foreground={foreground}
               font={font}
